@@ -58,7 +58,7 @@ public class PIDSimMTL {
 
 				String fName = csvFiles[g].getName();									
 				String groupName = fName.replaceFirst("[.][^.]+$", "");
-				System.out.println("PIDSimMTL Group: "+groupName);
+				System.out.println("PIDSimMTL for Drug Target Group/Class: "+groupName);
 				BufferedReader infile = new BufferedReader( new FileReader( groupFile ) ); // input1.txt
 				String datasetName;
 				int it = 0;
@@ -213,7 +213,7 @@ public class PIDSimMTL {
 				System.out.println("Datasets have been concatenated into one large dataset!");
 
 				PrintWriter out = new PrintWriter("Results\\PIDSimMTL\\PIDSimMTL_"+groupName+".csv");
-				out.println("rep,fold,organism_tid,row_id,actual,prediction");
+				out.println("fold,organism_tid,row_id,actual,prediction");
 
 				double[] actualValues = new double[allSrcData.numInstances()];
 				double[] predictedValues = new double[allSrcData.numInstances()];
@@ -270,8 +270,8 @@ public class PIDSimMTL {
 					//output repetition,fold,row_id,acual,prediction
 					//for openML compatibility
 					for(int z = 0; z < testIDs.length; z++){
-						out.println("1,"+n+","+testOrgIDs[z]+","+testIDs[z]+","+actuals[z]+","+preds[z]);
-						//System.out.println("1,"+n+","+testIDs[z]+","+actuals[z]+","+preds[z]);
+						out.println((n+1)+","+testOrgIDs[z]+","+testIDs[z]+","+actuals[z]+","+preds[z]);
+						//System.out.println((n+1)+","+testIDs[z]+","+actuals[z]+","+preds[z]);
 					}
 					out.flush();
 

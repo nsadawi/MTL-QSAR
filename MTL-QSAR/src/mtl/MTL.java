@@ -182,7 +182,7 @@ public class MTL {
 
 
 				PrintWriter out = new PrintWriter("Results\\MTL\\MTL_"+groupName+".csv");
-				out.println("rep,fold,organism_tid,row_id,actual,prediction");
+				out.println("fold,organism_tid,row_id,actual,prediction");
 
 				double[] actualValues = new double[allSrcData.numInstances()];
 				double[] predictedValues = new double[allSrcData.numInstances()];
@@ -238,8 +238,8 @@ public class MTL {
 					//output repetition,fold,row_id,acual,prediction
 					//for openML compatibility
 					for(int z = 0; z < testIDs.length; z++){
-						out.println("1,"+n+","+testOrgIDs[z]+","+testIDs[z]+","+actuals[z]+","+preds[z]);
-						//System.out.println("1,"+n+","+testIDs[z]+","+actuals[z]+","+preds[z]);
+						out.println((n+1)+","+testOrgIDs[z]+","+testIDs[z]+","+actuals[z]+","+preds[z]);
+						//System.out.println((n+1)+","+testIDs[z]+","+actuals[z]+","+preds[z]);
 					}
 					out.flush();
 

@@ -51,7 +51,7 @@ public class StdRF {
 				String datasetName;
 				while((datasetName = infile.readLine()) != null)
 				{							
-					System.out.println("STD RF LEVELS " +dataDir+datasetName);
+					System.out.println("StdRF on dataset: " +dataDir+datasetName);
 
 					String dsName = datasetName.replaceFirst("[.][^.]+$", "");
 					PrintWriter out = new PrintWriter("Results/StdRF/StdRF_"+dsName+".csv");
@@ -101,13 +101,15 @@ public class StdRF {
 						//output repetition,fold,row_id,acual,prediction
 						//for openML compatibility
 						for(int z = 0; z < testIDs.length; z++){
-							out.println("1,"+n+","+testIDs[z]+","+actuals[z]+","+preds[z]);
-							//System.out.println("1,"+n+","+testIDs[z]+","+actuals[z]+","+preds[z]);
+							out.println((n+1)+","+testIDs[z]+","+actuals[z]+","+preds[z]);
+							//System.out.println((n+1)+","+testIDs[z]+","+actuals[z]+","+preds[z]);
 						}
 						out.flush();
 						System.out.println("Finished fold #: "+(n+1));
-					}
+					}					
 					out.close();
+					System.out.println("Finished StdRF on dataset: " +dataDir+datasetName);
+					System.out.println("---------------------");
 				}
 				infile.close();							
 			}							
