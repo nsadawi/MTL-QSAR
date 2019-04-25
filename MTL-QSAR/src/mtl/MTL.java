@@ -1,31 +1,32 @@
 /**
- * By Noureddin Sadawi .. June 2015
+ * By Noureddin Sadawi .. April 2019
  * In this class we perform Multiple Task Learning by taking drug classes one
- * at a time, concatenating their corresponding datasets and adding each target's 
+ * at a time, concatenating their corresponding datasets and adding each drug target's 
  * ID as a new column in the dataset
- * When we do cross-validation, we stratify based on the target ID
+ * When we do cross-validation, we stratify based on the drug target ID
  * Notice in each Level, each drug class or group is represented by a text file
  * This text file contains a list of dataset names
  * Each of these datasets represents one drug target
- * The target ID can be worked out from the dataset name
+ * The drug target ID can be worked out from the dataset name
+ * * The resulting file is saved in such a way that it contains:
+ * the fold number, the drug target ID (i.e. the dataset name), the drug id (i.e. instance id), actual value, predicted value
+ * These values can be easily used to compute the average RMSE for a particular drug target (i.e. dataset)
+ * All needs to be done is to filter the resulting file by drug target ID and then compute average RMSE
  */
 package mtl;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileFilter;
 import java.io.FileReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.LinkedHashSet;
 
-import mtl.Utility;
-
 import weka.classifiers.trees.RandomForest;
 import weka.core.Instance;
 import weka.core.Instances;
-import weka.core.converters.ArffSaver;
+//import weka.core.converters.ArffSaver;
 import weka.core.converters.ConverterUtils.DataSource;
 import weka.filters.Filter;
 import weka.filters.unsupervised.attribute.Add;
@@ -39,7 +40,7 @@ public class MTL {
 		// TODO Auto-generated method stub
 		try{
 
-			//this is where the drug classes are (each class is represnted by a textfile)
+			//this is where the drug classes are (each class is represented by a text file)
 			//each text file has a list of dataset names 
 			String workingDir = "ChEMBL20\\L5\\";
 			// where the datsets are!
@@ -55,7 +56,7 @@ public class MTL {
 
 				String fName = csvFiles[g].getName();									
 				String groupName = fName.replaceFirst("[.][^.]+$", "");
-				System.out.println("MTL Group: "+groupName);
+				System.out.println("MTL .. Drug Target Group/Class: "+groupName+" -- with "+allTIDs.length+" drug targets!");
 				BufferedReader infile = new BufferedReader( new FileReader( groupFile ) ); // input1.txt
 				String datasetName;
 				int it = 0;
@@ -141,7 +142,7 @@ public class MTL {
 					tmpSrcData.setClassIndex(tmpSrcData.numAttributes() - 1);
 
 					//now do the merging						
-					Enumeration enumer = tmpSrcData.enumerateInstances();
+					Enumeration<Instance> enumer = tmpSrcData.enumerateInstances();
 					while (enumer.hasMoreElements()) {
 						Instance instance = (Instance) enumer.nextElement();
 						//instance.attribute("MOLECULE_CHEMBL_ID");
@@ -176,11 +177,11 @@ public class MTL {
 				//saver.setInstances(allSrcData);
 				//saver.setFile(new File("MTL-Datasets/"+groupName+".arff"));
 				//saver.writeBatch();
-				
-				System.out.println("Done Stage 1 of MTL");
+
+				System.out.println("Datasets have been concatenated into one large dataset!");
 
 
-				PrintWriter out = new PrintWriter("Results\\MTL_"+groupName+".csv");
+				PrintWriter out = new PrintWriter("Results\\MTL\\MTL_"+groupName+".csv");
 				out.println("rep,fold,organism_tid,row_id,actual,prediction");
 
 				double[] actualValues = new double[allSrcData.numInstances()];
@@ -245,7 +246,7 @@ public class MTL {
 					System.out.println("Finished fold #: "+(n+1));
 				}
 				out.close();
-				System.out.println("Finished MTL Group: "+groupName);
+				System.out.println("Finished MTL for Drug Target Group/Class: "+groupName);
 				System.out.println("----------------------------");
 
 				// Now let's save the model?
@@ -261,7 +262,6 @@ public class MTL {
 				//rf.buildClassifier(allSrcData);
 				//save the model?
 				//weka.core.SerializationHelper.write("MTL-Models\\"+groupName+".model", rf);				
-
 			}			
 		}
 		catch(Exception e){
