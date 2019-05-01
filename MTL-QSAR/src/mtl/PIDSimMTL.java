@@ -37,7 +37,7 @@ import weka.filters.Filter;
 import weka.filters.unsupervised.attribute.Add;
 
 public class PIDSimMTL {
-	
+
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		try{
@@ -99,10 +99,12 @@ public class PIDSimMTL {
 				}
 
 				// this is to merge all source datasets
+				// give it the values of the first dataset in the group then attach others later
 				DataSource allSource = new DataSource(dataDir+(allTIDs[0])+".csv");
 				Instances allSrcData = allSource.getDataSet();				
 				allSrcData.setClassIndex(allSrcData.numAttributes() - 1);
-
+				//to avoid clashes of MOLECULE_CHEMBL_ID we drop it here and add it later
+				// remember the same MOLECULE_CHEMBL_ID can exist in more than one dataset
 				allSrcData = Utility.removeFstAttr(allSrcData);				
 				allSrcData.setClassIndex(allSrcData.numAttributes() - 1);
 
@@ -114,16 +116,12 @@ public class PIDSimMTL {
 				addTID.setInputFormat(allSrcData);
 				allSrcData = Filter.useFilter(allSrcData, addTID);
 				for (int i = 0; i < allSrcData.numInstances(); i++) {		        
-					//nominal
 					allSrcData.instance(i).setValue(0, allTIDs[0]);
-					// 2. numeric
-					//allSrcData.instance(i).setValue(0, allTIDs[0]);
 				}
 				allSrcData.setClassIndex(allSrcData.numAttributes() - 1);
 
-
+				// notice we start from one because the first dataset is already there
 				for(int i = 1; i < numTIDs ; i++){
-					//System.out.println(allSrcData.numInstances()+" - "+allSrcData.numAttributes());
 					DataSource tmpSource = new DataSource(dataDir+(allTIDs[i])+".csv");
 					Instances tmpSrcData = tmpSource.getDataSet();				
 					tmpSrcData.setClassIndex(tmpSrcData.numAttributes() - 1);				
@@ -141,8 +139,6 @@ public class PIDSimMTL {
 					tmpSrcData = Filter.useFilter(tmpSrcData, addTID);
 					for (int k = 0; k < tmpSrcData.numInstances(); k++) {		        
 						tmpSrcData.instance(k).setValue(0, allTIDs[i]);
-						// 2. numeric
-						//tmpSrcData.instance(k).setValue(0, allTIDs[i]);
 					}
 					tmpSrcData.setClassIndex(tmpSrcData.numAttributes() - 1);
 
@@ -153,7 +149,6 @@ public class PIDSimMTL {
 						//instance.attribute("MOLECULE_CHEMBL_ID");
 						allSrcData.add(instance);
 					}
-					//System.out.println(allTIDs[i] + " "+tmpSrcData.numInstances());
 				}
 
 				//now let's add columns for similarity values
@@ -166,8 +161,6 @@ public class PIDSimMTL {
 					addTID.setInputFormat(allSrcData);
 					allSrcData = Filter.useFilter(allSrcData, addTID);
 					for (int k = 0; k < allSrcData.numInstances(); k++) {		        
-						// 2. numeric
-						//int v = (int)allSrcData.instance(k).value(allSrcData.attribute("ORGANISM_TID"));
 						String sv = allSrcData.instance(k).stringValue(allSrcData.attribute("ORGANISM_TID"));
 						String v = sv;
 						if(tid.equals(v))//similarity between tid and itself
@@ -182,6 +175,7 @@ public class PIDSimMTL {
 					allSrcData.setClassIndex(allSrcData.numAttributes() - 1);
 				}
 
+				// here we return the MOLECULE_CHEMBL_ID as the first column
 				ArrayList<String> molIDsNoDups = new ArrayList<String>(new LinkedHashSet<String>(molIDs));
 				String labels = "" ;
 				for(int j = 0; j < molIDsNoDups.size(); j++){						
@@ -189,17 +183,14 @@ public class PIDSimMTL {
 					if(j < molIDsNoDups.size())
 						labels += ",";											
 				}
-				Add filter;
-				//newData = new Instances(data);
-				// 1. nominal attribute
+				Add filter;				
 				filter = new Add();
 				filter.setAttributeIndex("first");
 				filter.setNominalLabels(labels);
 				filter.setAttributeName("MOLECULE_CHEMBL_ID");
 				filter.setInputFormat(allSrcData);
 				allSrcData = Filter.useFilter(allSrcData, filter);
-				for (int i = 0; i < allSrcData.numInstances(); i++) {
-					// 1. nominal				
+				for (int i = 0; i < allSrcData.numInstances(); i++) {			
 					allSrcData.instance(i).setValue(0, molIDs.get(i));
 				}					
 

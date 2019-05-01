@@ -3,15 +3,17 @@
  * In this class we perform Multiple Task Learning by taking drug classes one
  * at a time, concatenating their corresponding datasets and adding each drug target's 
  * ID as a new column in the dataset
- * When we do cross-validation, we stratify based on the drug target ID
- * Notice in each Level, each drug class or group is represented by a text file
- * This text file contains a list of dataset names
- * Each of these datasets represents one drug target
- * The drug target ID can be worked out from the dataset name
- * The resulting file is saved in such a way that it contains:
- * the fold number, the drug target ID (i.e. the dataset name), the drug id (i.e. instance id), actual value, predicted value
- * These values can be easily used to compute the average RMSE for a particular drug target (i.e. dataset)
- * All needs to be done is to filter the resulting file by drug target ID and then compute average RMSE
+ * We perform randomisation of the class variable and perform the following steps
+ *  - When we do cross-validation, we stratify based on the drug target ID
+ *  - Notice in each Level, each drug class or group is represented by a text file
+ *  - This text file contains a list of dataset names
+ *  - Each of these datasets represents one drug target
+ *  - The drug target ID can be worked out from the dataset name
+ *  - The resulting file is saved in such a way that it contains:
+ *  - the fold number, the drug target ID (i.e. the dataset name), the drug id (i.e. instance id), actual value, predicted value
+ *  - These values can be easily used to compute the average RMSE for a particular drug target (i.e. dataset)
+ *  - All needs to be done is to filter the resulting file by drug target ID and then compute average RMSE
+ *  The above steps are repeated several times (each time the class variable is randomised)
  */
 package mtl;
 
@@ -19,6 +21,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.LinkedHashSet;
@@ -31,7 +35,7 @@ import weka.core.converters.ConverterUtils.DataSource;
 import weka.filters.Filter;
 import weka.filters.unsupervised.attribute.Add;
 
-public class MTL {
+public class PermMTL {
 
 	/**
 	 * @param args
@@ -134,9 +138,7 @@ public class MTL {
 					addTID.setInputFormat(tmpSrcData);
 					tmpSrcData = Filter.useFilter(tmpSrcData, addTID);
 					for (int k = 0; k < tmpSrcData.numInstances(); k++) {		        
-						tmpSrcData.instance(k).setValue(0, allTIDs[i]);
-						// 2. numeric
-						//tmpSrcData.instance(k).setValue(0, allTIDs[i]);
+						tmpSrcData.instance(k).setValue(0, allTIDs[i]);						
 					}
 					tmpSrcData.setClassIndex(tmpSrcData.numAttributes() - 1);
 
@@ -147,7 +149,6 @@ public class MTL {
 						//instance.attribute("MOLECULE_CHEMBL_ID");
 						allSrcData.add(instance);
 					}
-					//System.out.println(allTIDs[i] + " "+tmpSrcData.numInstances());
 				}
 				// here we return the MOLECULE_CHEMBL_ID as the first column
 				ArrayList<String> molIDsNoDups = new ArrayList<String>(new LinkedHashSet<String>(molIDs));
@@ -177,72 +178,90 @@ public class MTL {
 				System.out.println("Datasets have been concatenated into one large dataset!");
 
 
-				PrintWriter out = new PrintWriter("Results\\MTL\\MTL_"+groupName+".csv");
-				out.println("fold,organism_tid,row_id,actual,prediction");
-
-				double[] actualValues = new double[allSrcData.numInstances()];
-				double[] predictedValues = new double[allSrcData.numInstances()];
-				int apIndex = 0;				
-				int folds = 10;
-				//set class id for nominal variable oranismID
-				allSrcData.setClassIndex(1);
-				allSrcData.stratify(folds);
-				// perform cross-validation	
-				//allSrcData.randomize(new Random(1));
-				System.out.println("Starting cross validation:");
-				for (int n = 0; n < folds; n++) {					
-					//get the folds	      
-					Instances trainData = allSrcData.trainCV(folds, n);				
-					trainData.setClassIndex(trainData.numAttributes() - 1);
-					Instances testData = allSrcData.testCV(folds, n);								
-					testData.setClassIndex(testData.numAttributes() - 1);
-
-					//get IDs of test instances
-					String[] testIDs = new String[testData.numInstances()];				
-					for (int i = 0; i < testData.numInstances(); i++) {
-						String v = testData.instance(i).stringValue(testData.attribute("MOLECULE_CHEMBL_ID"));
-						testIDs[i] = v;
-					}
-
-					//get organismTIDs of test instances
-					String[] testOrgIDs = new String[testData.numInstances()];				
-					for (int i = 0; i < testData.numInstances(); i++) {
-						String v = testData.instance(i).stringValue(testData.attribute("ORGANISM_TID"));
-						testOrgIDs[i] = v;
-					}
-					//remove MOLECULE_CHEMBL_ID
-					trainData = Utility.removeFstAttr(trainData);
-					testData = Utility.removeFstAttr(testData);
 
 
-					double[] actuals = Utility.getActuals(testData);//get actual values
-					//build RF model
-					RandomForest rf = new RandomForest();
-					rf.setNumTrees(100);
-					rf.buildClassifier(trainData);
-					// finds the predictions
-					double[] preds = Utility.makePredictions(rf, testData);
+				// get the double values of class variable
+				double[] classValues = new double[allSrcData.numInstances()];
 
-					//copy actual and predicted values of test fold into actualValues and predcitedValues
-					for(int z = 0; z < testIDs.length; z++){
-						actualValues[z+apIndex] = actuals[z];
-						predictedValues[z+apIndex] = preds[z];						
-						//System.out.println("1,"+n+","+testIDs[z]+","+actuals[z]+","+preds[z]);
-					}
-					apIndex += testIDs.length;
-
-					//output repetition,fold,row_id,acual,prediction
-					//for openML compatibility
-					for(int z = 0; z < testIDs.length; z++){
-						out.println((n+1)+","+testOrgIDs[z]+","+testIDs[z]+","+actuals[z]+","+preds[z]);
-						//System.out.println((n+1)+","+testIDs[z]+","+actuals[z]+","+preds[z]);
-					}
-					out.flush();
-
-					System.out.println("Finished fold #: "+(n+1));
+				for (int i=0; i <allSrcData.numInstances();i++) {
+					classValues[i] = allSrcData.instance(i).classValue(); 
 				}
-				out.close();
-				System.out.println("Finished MTL for Drug Target Group/Class: "+groupName);
+
+				// Now perform Y Randomisation
+				for(int randIter = 0; randIter < 5; randIter++){
+					//shuffle class values for the large dataset
+					Utility.shuffleArray(classValues);					
+					for (int i=0; i <allSrcData.numInstances();i++) {
+						allSrcData.instance(i).setValue(allSrcData.numAttributes()-1, classValues[i]);
+					}
+					Files.createDirectories(Paths.get("Results\\RandMTL\\"+groupName));
+					PrintWriter out = new PrintWriter("Results\\RandMTL\\"+groupName+"\\MTL_"+groupName+"_"+randIter+".csv");
+					out.println("fold,organism_tid,row_id,actual,prediction");
+
+					double[] actualValues = new double[allSrcData.numInstances()];
+					double[] predictedValues = new double[allSrcData.numInstances()];
+					int apIndex = 0;				
+					int folds = 10;
+					//set class id for nominal variable oranismID
+					allSrcData.setClassIndex(1);
+					allSrcData.stratify(folds);
+					// perform cross-validation	
+					//allSrcData.randomize(new Random(1));
+					System.out.println("Starting cross validation:");
+					for (int n = 0; n < folds; n++) {					
+						//get the folds	      
+						Instances trainData = allSrcData.trainCV(folds, n);				
+						trainData.setClassIndex(trainData.numAttributes() - 1);
+						Instances testData = allSrcData.testCV(folds, n);								
+						testData.setClassIndex(testData.numAttributes() - 1);
+
+						//get IDs of test instances
+						String[] testIDs = new String[testData.numInstances()];				
+						for (int i = 0; i < testData.numInstances(); i++) {
+							String v = testData.instance(i).stringValue(testData.attribute("MOLECULE_CHEMBL_ID"));
+							testIDs[i] = v;
+						}
+
+						//get organismTIDs of test instances
+						String[] testOrgIDs = new String[testData.numInstances()];				
+						for (int i = 0; i < testData.numInstances(); i++) {
+							String v = testData.instance(i).stringValue(testData.attribute("ORGANISM_TID"));
+							testOrgIDs[i] = v;
+						}
+						//remove MOLECULE_CHEMBL_ID
+						trainData = Utility.removeFstAttr(trainData);
+						testData = Utility.removeFstAttr(testData);
+
+
+						double[] actuals = Utility.getActuals(testData);//get actual values
+						//build RF model
+						RandomForest rf = new RandomForest();
+						rf.setNumTrees(100);
+						rf.buildClassifier(trainData);
+						// finds the predictions
+						double[] preds = Utility.makePredictions(rf, testData);
+
+						//copy actual and predicted values of test fold into actualValues and predcitedValues
+						for(int z = 0; z < testIDs.length; z++){
+							actualValues[z+apIndex] = actuals[z];
+							predictedValues[z+apIndex] = preds[z];						
+							//System.out.println("1,"+n+","+testIDs[z]+","+actuals[z]+","+preds[z]);
+						}
+						apIndex += testIDs.length;
+
+						//output repetition,fold,row_id,acual,prediction
+						//for openML compatibility
+						for(int z = 0; z < testIDs.length; z++){
+							out.println((n+1)+","+testOrgIDs[z]+","+testIDs[z]+","+actuals[z]+","+preds[z]);
+							//System.out.println((n+1)+","+testIDs[z]+","+actuals[z]+","+preds[z]);
+						}
+						out.flush();
+
+						System.out.println("Finished fold #: "+(n+1));
+					}
+					out.close();
+				}// end perform Y Randomisation
+				System.out.println("Finished MTL with Y-Randomisation for Drug Target Group/Class: "+groupName);
 				System.out.println("----------------------------");
 
 				// Now let's save the model?

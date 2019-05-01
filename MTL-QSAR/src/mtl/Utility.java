@@ -13,6 +13,7 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -108,6 +109,21 @@ public class Utility {
 		//set class index
 		ndata.setClassIndex(ndata.numAttributes() - 1);
 		return ndata;		
+	}
+
+	/**
+	 * Shuffles a double array (in place)
+	 * @param array input double array
+	 * @return shuffled array
+	 */
+	public static void shuffleArray(double[] array){
+		Random rgen = new Random(); 
+		for (int i=0; i<array.length; i++) {
+			int randomPosition = rgen.nextInt(array.length);
+			double temp = array[i];
+			array[i] = array[randomPosition];
+			array[randomPosition] = temp;
+		} 		
 	}
 
 
