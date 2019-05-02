@@ -271,20 +271,6 @@ public class PIDSimMTL {
 				out.close();
 				System.out.println("Finished PIDSimMTL for Drug Target Group/Class: "+groupName);
 				System.out.println("----------------------------");
-
-				// Now let's save the model?
-				//set class id for nominal variable oranismTID
-				//allSrcData.setClassIndex(numTIDs+1);
-				//allSrcData.stratify(folds);
-				//remove MOLECULE_CHEMBL_ID
-				//and set activity as class variable
-				//allSrcData = Utility.removeFstAttr(allSrcData);
-				//build RF model with all data
-				//RandomForest rf = new RandomForest();
-				//rf.setNumTrees(100);
-				//rf.buildClassifier(allSrcData);
-				//save the model?
-				//weka.core.SerializationHelper.write("PIDSimMTL-Models/"+groupName+".model", rf);										
 			}
 		}
 
