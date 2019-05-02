@@ -1,6 +1,7 @@
 # MTL-QSAR
-This repository has the Java source code for MTL-QSAR paper **Multi-Task Learning with a Natural Metric for Quantitative Structure
-  Activity Relationship Learning**
+This repository has the Java source code for MTL-QSAR paper *Multi-Task Learning with a Natural Metric for Quantitative Structure Activity Relationship Learning*
+
+Please watch this video to see how to run the code: https://youtu.be/mZOr0HVwbKM
   
 The datasets used in this experiments are available on https://www.openml.org/s/3
 
