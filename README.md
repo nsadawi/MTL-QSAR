@@ -1,11 +1,11 @@
 # MTL-QSAR
 This repository has the Java source code for MTL-QSAR paper *Multi-Task Learning with a Natural Metric for Quantitative Structure Activity Relationship Learning*
 
-Please watch this video to see how to run the code: https://youtu.be/mZOr0HVwbKM
-  
-The datasets used in this experiments are available on https://www.openml.org/s/3
+Please watch this video to see how to run the code: <a href="https://youtu.be/mZOr0HVwbKM" target="_blank">MTL-QSAR Video</a>
+ 
+The datasets used in this experiments are available on <a href="https://www.openml.org/s/3" target="_blank">MTL-QSAR Datasets on OpenML</a> 
 
-* Please download the datasets and similarity values available on google drive here: https://drive.google.com/drive/folders/1WCQWIe7wlVfQ7vbwZgHXQy3YDRAPMUte?usp=sharing
+* Please download the datasets and similarity values available on google drive here: <a href="https://drive.google.com/drive/folders/1WCQWIe7wlVfQ7vbwZgHXQy3YDRAPMUte?usp=sharing" target="_blank">MTL-QSAR Data on GDrive</a> 
 
 * Unzip the ECFP6_1024.zip file and make sure the resulting folder replaces the empty folder ECFP6_1024/ which is inside MTL-QSAR/ project folder
 
