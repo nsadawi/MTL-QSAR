@@ -3,7 +3,7 @@ This repository has the Java source code for MTL-QSAR paper *Multi-Task Learning
 
 Please watch this video to see how to run the code: <a href="https://youtu.be/mZOr0HVwbKM" target="_blank">MTL-QSAR Video</a>
 
-[![MTL-QSAR Video](https://img.youtube.com/vi/mZOr0HVwbKM/0.jpg)](https://www.youtube.com/watch?v=mZOr0HVwbKM "Everything Is AWESOME")
+[![MTL-QSAR Video](https://img.youtube.com/vi/mZOr0HVwbKM/0.jpg)](https://www.youtube.com/watch?v=mZOr0HVwbKM "MTL-QSAR Video")
 
 
 
