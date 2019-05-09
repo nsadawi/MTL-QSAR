@@ -7,7 +7,7 @@ Please watch this video to see how to run the code: <a href="https://youtu.be/mZ
 
 
 
-The datasets used in this experiments are available on <a href="https://www.openml.org/s/3" target="_blank">MTL-QSAR Datasets on OpenML</a> 
+The datasets used in this experiments are available on <a href="https://www.openml.org/s/3" target="blank">MTL-QSAR Datasets on OpenML</a> 
 
 * Please download the datasets and similarity values available on google drive here: <a href="https://drive.google.com/drive/folders/1WCQWIe7wlVfQ7vbwZgHXQy3YDRAPMUte?usp=sharing" target="_blank">MTL-QSAR Data on GDrive</a> 
 
