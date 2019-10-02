@@ -20,9 +20,9 @@ The datasets used in this experiments are available on <a href="https://www.open
   * The file AGC_protein_kinase_NDR_family_sequences.seq contains the sequences of each of the drug targets and the file AGC_protein_kinase_NDR_family_pid.pid contains the percentage ID similarity values for those drug targets. 
   * The results of running standard RandomForest, MTL and SimMTL approaches as explained in the paper are in the folders: Results\StdRF, Results\MTL and Results\PIDSimMTL respectively. 
   * The folder ECFP6_1024\ contains the corresponding datasets (list of ccompounds and their activity values on the drug target) for these drug targets. Notice the dataset name is the drug target ID. 
-  * As part of validation our results, we have performed a randomisation procedure by shuffling the similarity values in the SimMTL approach. We have randomly selected 24 level 5 classes (the total number of drug targets is 120) and randomised their similarity values 1000 times. Each time we randomise we run SimMTL and compute RSME for each drug target. The file 'Group-24-TID-100-Results-1000reps.csv' available under the 'MTL-QSAR\Results' folder has the results. The first two rows are headers (group and drug target TID), the third row is the RSME value for that particular TID without randomising similarity values, and the remaining 1000 rows contain the RSME values after randomisation.
-
+  
   * The features are molecular fingerprints.
 
 * The full data with all Drug Target Classes and their datasets and similarity values is available on the GDrive mentioned above.
 
+* As part of validation our results, we have performed a randomisation procedure by shuffling the similarity values in the SimMTL approach. We have randomly selected 24 level 5 classes (the total number of drug targets is 120) and randomised their similarity values 1000 times. Each time we randomise we run SimMTL and compute RSME for each drug target. The file 'Group-24-TID-100-Results-1000reps.csv' available under the 'MTL-QSAR\Results' folder has the results. The first two rows are headers (group and drug target TID), the third row is the RSME value for that particular TID without randomising similarity values, and the remaining 1000 rows contain the RSME values after randomisation.
