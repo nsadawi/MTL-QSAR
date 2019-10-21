@@ -29,4 +29,8 @@ The datasets used in this experiments are available on <a href="https://www.open
 
 * Also, to validate results, we have performed a randomisation procedure by shuffling the Y-variable in the MTL approach. We have randomised it 1000 times and computed RSME for each drug target each iteration. The file 'MTL-YRandom1000-StdRF.csv' available under the 'MTL-QSAR\Results' folder has the results. The first row is the header (iteration number and drug target TIDs), the second row is the RSME value for that particular TID when performing STL (i.e. standard randomforest), and the remaining 1000 rows contain the RSME values for MTL after randomisation. It can be seen that the values in the standard randomforest row are always smaller than those of the other rows. This has been explained in the paper.
 
+* The file 'benefited-not-benefited.pdf' contains lists of drug target classes that fully or not fully benefit from our settings. This is explained in more detail in the manuscript.
+
+
+
 
