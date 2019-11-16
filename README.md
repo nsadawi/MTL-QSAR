@@ -22,6 +22,7 @@ url="https://doi.org/10.1186/s13321-019-0392-1"
 } 
 ```
 
+## Important Details
 Please watch this video to see how to run the code: <a href="https://youtu.be/mZOr0HVwbKM" target="_blank">MTL-QSAR Video</a>
 
 [![MTL-QSAR Video](https://img.youtube.com/vi/mZOr0HVwbKM/0.jpg)](https://www.youtube.com/watch?v=mZOr0HVwbKM "MTL-QSAR Video")
