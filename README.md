@@ -6,40 +6,19 @@ The code in this repository is free and can as desired. However, please cite thi
 
 ```
 @Article{Sadawi2019,
-author="Sadawi, Noureddin 
-and Olier, Ivan
- and Vanschoren, Joaquin
- and van Rijn, Jan N.
- and Besnard, Jeremy
- and Bickerton, Richard 
-and Grosan, Crina 
-and Soldatova, Larisa
- and King, Ross D.",
-
+author="Sadawi, Noureddin and Olier, Ivan and Vanschoren, Joaquin and van Rijn, Jan N. and Besnard, Jeremy and Bickerton, Richard and Grosan, Crina and Soldatova, Larisa and King, Ross D.",
 title="Multi-task learning with a natural metric for quantitative structure activity relationship learning",
-
 journal="Journal of Cheminformatics",
-
 year="2019",
-
 month="Nov",
-
 day="12",
-
 volume="11",
-
 number="1",
-
 pages="68",
-
 abstract="The goal of quantitative structure activity relationship (QSAR) learning is to learn a function that, given the structure of a small molecule (a potential drug), outputs the predicted activity of the compound. We employed multi-task learning (MTL) to exploit commonalities in drug targets and assays. We used datasets containing curated records about the activity of specific compounds on drug targets provided by ChEMBL. Totally, 1091 assays have been analysed. As a baseline, a single task learning approach that trains random forest to predict drug activity for each drug target individually was considered. We then carried out feature-based and instance-based MTL to predict drug activities. We introduced a natural metric of evolutionary distance between drug targets as a measure of tasks relatedness. Instance-based MTL significantly outperformed both, feature-based MTL and the base learner, on 741 drug targets out of 1091. Feature-based MTL won on 179 occasions and the base learner performed best on 171 drug targets. We conclude that MTL QSAR is improved by incorporating the evolutionary distance between targets. These results indicate that QSAR learning can be performed effectively, even if little data is available for specific drug targets, by leveraging what is known about similar drug targets.",
-
 issn="1758-2946",
-
 doi="10.1186/s13321-019-0392-1",
-
 url="https://doi.org/10.1186/s13321-019-0392-1"
-
 } 
 ```
 
