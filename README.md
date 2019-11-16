@@ -1,5 +1,20 @@
 # MTL-QSAR
-This repository has the Java source code for MTL-QSAR paper *Multi-Task Learning with a Natural Metric for Quantitative Structure Activity Relationship Learning*
+This repository has the Java source code for MTL-QSAR paper <a href="https://link.springer.com/article/10.1186/s13321-019-0392-1?wt_mc=Internal.Event.1.SEM.ArticleAuthorIncrementalIssue&utm_source=ArticleAuthorIncrementalIssue&utm_medium=email&utm_content=AA_en_06082018&ArticleAuthorIncrementalIssue_20191115" target="_blank">*Multi-Task Learning with a Natural Metric for Quantitative Structure Activity Relationship Learning*</a>
+
+## License and Citation
+The code in this repository is free and can as desired. However, please cite this paper if you find this code useful in your research or you use it for any other purpose:
+
+```
+@inproceedings{Sadawi2019,
+ author = {Noureddin Sadawi, Ivan Olier, Joaquin Vanschoren, Jan N. van Rijn, Jeremy Besnard, Richard Bickerton, Crina Grosan, Larisa Soldatova, Ross D. King},
+ title = {Multi-task learning with a natural metric for quantitative structure activity relationship learning},
+ Journal = {Journal of Cheminformatics volume},
+ publisher = {Springer},
+ year = {2019},
+ doi = {10.1186/s13321-019-0392-1},
+ keywords = {Multi-task learning, Quantitative structure activity relationship, Sequence-based similarity, Random forest}  
+} 
+```
 
 Please watch this video to see how to run the code: <a href="https://youtu.be/mZOr0HVwbKM" target="_blank">MTL-QSAR Video</a>
 
